@@ -1,0 +1,51 @@
+{
+  "ssh_pairs": [
+    [1.0, 0.5],
+    [0.5, 1.0]
+  ],
+  "chain": {
+    "n_cells": 20,
+    "edge_threshold": 0.1,
+    "amp_n_cells": 30
+  },
+  "localization": {
+    "r_list": [0.0, 0.5, 0.8, 0.95],
+    "n_cells": 60
+  },
+  "resolution": {
+    "ncell_list": [4, 6, 8, 10, 12, 16, 20, 30, 40],
+    "ncell_pairs": [
+      [0.5, 1.0],
+      [0.8, 1.0]
+    ],
+    "fit_min_ncell": 12
+  },
+  "chiral": {
+    "strength": 0.3,
+    "n_realizations": 40,
+    "seed": 777
+  },
+  "winding_pairs": [
+    [1.0, 0.5],
+    [0.5, 1.0],
+    [2.0, 1.0],
+    [1.0, 3.0]
+  ],
+  "zak_k_points": 400,
+  "zak_scan": {
+    "t1": 1.0,
+    "t2_min": 0.05,
+    "t2_max": 2.0,
+    "n": 40
+  },
+  "disorder": {
+    "n_cells": 20,
+    "t1": 0.5,
+    "t2": 1.0,
+    "strengths": [0.0, 0.1, 0.2, 0.3, 0.4],
+    "n_realizations": 40,
+    "M_list": [5, 10, 20, 40, 80, 160],
+    "M_strength": 0.3,
+    "seed": 12345
+  }
+}
