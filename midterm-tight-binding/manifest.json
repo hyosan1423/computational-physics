@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-09",
+  "source": {
+    "note": "all files in this folder; checksums computed after the last edit"
+  },
+  "sha256": {
+    "README.md": "997bad29085878e681252449427c60e265bf9ad56819d40c8ce0a0ba096933d3",
+    "index.html": "47e2839259b042781245d221784481d647443b74e0983757a2245ab85002439d",
+    "input/params.json": "96fd090437bec98561b42c1148206547924207c974b1387340c1f82974d558fa",
+    "output/bands_ssh.csv": "abb4ce03272df191fd62344b39e839166d28f4a7053ab4b1f54db90f34fbcec7",
+    "output/edge_density.csv": "0753d958832d47b112a057308c14ac023b4a11372154cc8c27ccfb4b9d623f5a",
+    "output/edge_states.csv": "63dadca88af8b6fb22f5d526738e7f8f6af3688ab01494872977ae4e3347c473",
+    "output/figs/fig1_monatomic.png": "d59b23b7403f88b78229e56b0a7dc35b966caf872ac4f22e31a07c4301eff885",
+    "output/figs/fig2_ring_check.png": "2ab8418b4b0a49f70a2d56a0733b6ddc3f02b8acc43dc56a44bf0cd2872b95f3",
+    "output/figs/fig3_bands_compare.png": "864b660b9a8565a628b76b90bf38edc1fd019399722545abdac13e27b6d5926a",
+    "output/figs/fig4_gap_vs_t2.png": "39878279d8645b7f9b069b25d09e2eee4c90f3273f433d4d4e252c2b4988473d",
+    "output/figs/fig6_edge_states.png": "ac7db398c486474111c40962b669f5d8066e9773154d477703ee1f6106791c10",
+    "output/figs/fig8_resolution.png": "093207e9b5f536ea23bafb64ac19859cf5540606e77d9d14a2dfe2d4c8fcb242",
+    "output/gap_vs_t2.csv": "b1a1578a2c3a3f45ff25a4295855f1144c6c7f70bd6e121af3d976dd6df2bdd3",
+    "output/monatomic_band.csv": "52db77ca3d8c33cb929f28c0e000e6ea57597225f91b47d780355b633af807d6",
+    "output/resolution_chain_gap.csv": "52ac2ae17303cd205aead993aaee0e86da1cd296bc27152b66ab39dbf2203c68",
+    "output/resolution_kgrid_gap.csv": "7b5108d7d7a4b7396061ca0ed15327551d64aa0484cd7218608c6ff3a6e84427",
+    "output/resolution_ring.csv": "c5677ee83dec69fb135c3268fe9f64af797dedc96c31363e1c7b93514d21d140",
+    "output/ring_check.csv": "85e840c185d580792bcac555ba6e6bebe82558fc446f11df69a2c64e2f1692b1",
+    "output/summary.json": "73122be9f1435c92a0577adb9633de1251024e065854e5799b9f6887e52c8ed6",
+    "project.py": "a2b09e960403585959a3f8dd391242732889456a7e140a4e9c40dff9e66cceb8",
+    "provenance.json": "5a840ac911458d5cde19d5a2e0b530f00db9be68ebdb3f4cb47104ddc96dba42",
+    "requirements.txt": "98ea4ed214ba28d66f9633414da593601470d55a91baa644b36f00e1c4d3424a",
+    "slides/SSH_midterm_slides.pptx": "8fde0382b6ab4ac20ecefcfd1fb922a24c7e30311b2ef5a1329a3e07b088644d",
+    "slides/figures/fig_dimerization.png": "e83301004295717e18bcfc2ff0fd9966ab2509cfe5fa80d050e8d0457b4d5f83",
+    "slides/figures/fig_folding.png": "ddf4c5dbbe66dcbba063f62d6a57012c97a7af61514a8179d524abe614bd05ed",
+    "slides/figures/fig_levels_N.png": "4df674b8174ce8a0d64ae26ed6fd3dcbfbd1a9231336ecc8eec37b29dad23d39",
+    "slides/figures/fig_ssh_chain.png": "02a9d34ef1bcf4f0b870b46b37fbc31a9d0f8361becb2d770a43214553658502",
+    "speaker_notes.md": "1590dd5a38575cd8585e72cb04543881441361733e3f93818cb6f5cee7418289",
+    "tight_binding.ipynb": "0357a8e9bcd327d01ec9a6cd902fb0a83e7fc11cc648de681ffea1df86c12885"
+  }
+}

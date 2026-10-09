@@ -1,7 +1,9 @@
 # SSH 사슬의 밴드갭 — Tight-Binding 계산 (전산물리학 중간 프로젝트)
 
-## Physics question
+Course companion to the slides in [`slides/SSH_midterm_slides.pptx`](slides/SSH_midterm_slides.pptx).
+The main talk is 15 slides with a suggested duration of 10 minutes; seven slides are backup material.
 
+## Physics question
 > SSH 사슬에서 $t_2/t_1$에 따라 밴드갭은 어떻게 변하고, 끝이 있는 유한 사슬의 수치 계산은 그 값에 얼마나 잘 수렴하는가?
 
 계산한 양: 밴드 $E_\pm(k)$와 갭 $E_{gap}$, 유한 사슬에서 가장 낮은 벌크 상태의 $\lvert E\rvert$, 그리고 (예비 관찰) 유한 사슬의 갭 안 상태.
@@ -12,32 +14,49 @@
 
 수치 방법: 행렬 대각화 (`numpy.linalg.eigh`). 행렬이 작아서(2×2, $2N\times2N$) 정확하고 시간 간격 같은 수렴 변수가 없다.
 
+## Presentation structure
+
+The talk follows the presentation guidelines.
+
+| Main slides | Part | Suggested time |
+|---|---|---|
+| 1–3 | Physics question and motivation | 1 minute |
+| 4–7 | Model and numerical method | 2 minutes |
+| 8–10 | Results and validation | 4 minutes |
+| 11–12 | Physical interpretation and limitations | 2 minutes |
+| 13–15 | Outlook and summary | 1 minute |
+
+Slides 16–22 are backup material. Each figure is explained in the order axes, comparison, trend, physical meaning.
+`speaker_notes.md` contains the complete script (memorized, not read), the time budget per slide, and sources.
+
 ## Environment and dependencies
 
-- Python 3.12.3, `numpy` 2.4.4, `matplotlib` 3.10.8 (그 외 패키지 없음)
-- Jupyter 노트북 실행 환경 (VS Code + Jupyter 확장 또는 JupyterLab)
+- Python 3.12.3. Tested versions are pinned in `requirements.txt` (numpy 2.4.4, matplotlib 3.10.8, ipykernel, nbformat, nbclient, nbconvert).
+- Install in a fresh environment: `python3.12 -m venv venv`, activate it, then `python -m pip install -r requirements.txt` and `python -m pip install jupyterlab`.
 
 ## How to run
 
-1. `tight_binding.ipynb`를 열고 **Restart → Run All** (약 10초).
-2. 결과(그래프, 출력)는 노트북에 이미 저장되어 있어서 실행하지 않아도 볼 수 있다.
-3. 실행하면 `output/` 아래의 csv, json, 그림이 새로 쓰인다.
-
-폴더 구성:
+1. Open `index.html` for the executed notebook with equations and figures. It works offline.
+2. For editable code, open `tight_binding.ipynb` in Jupyter or VS Code with a Python 3.12 kernel, and use **Restart Kernel and Run All** (about 10 s).
+3. For a script-only run: `python project.py`. It reads `input/params.json` (created from defaults if missing) and regenerates everything in `output/`. The script is generated from the notebook and gives the same numbers.
+4. The calculation uses no random numbers, so every run gives the same result.
 
 ```
 midterm-tight-binding/
 ├── README.md
-├── tight_binding.ipynb       # 코드
-├── input/params.json         # 입력: 계산 조건
-└── output/
-    ├── summary.json          # 핵심 수치
-    ├── *.csv                 # 계산 결과
-    └── figs/*.png            # 그림
+├── tight_binding.ipynb       # editable, executed notebook
+├── index.html                # offline reading copy (code, equations, figures)
+├── project.py                # script version of the notebook
+├── requirements.txt          # pinned versions
+├── manifest.json             # SHA-256 of every file
+├── provenance.json           # sources and revision
+├── speaker_notes.md          # complete script, time per slide, sources
+├── slides/SSH_midterm_slides.pptx
+├── input/params.json         # input: calculation settings
+└── output/                   # csv tables, summary.json, figs/*.png
 ```
 
 ## Inputs and parameters
-
 모든 계산 조건은 `input/params.json`에 있다 (파일이 없으면 노트북이 기본값으로 만든다). 이 파일의 값만 바꾸고 다시 실행하면 결과가 바뀐다.
 
 | 키 | 의미 | 기본값 |
@@ -53,7 +72,6 @@ midterm-tight-binding/
 | `resolution.chain_gap_ncell_list` | 사슬 길이(셀 수) 목록 | 10 ~ 160 |
 
 ## How to reproduce the figures
-
 | 그림 | 내용 | 노트북 절 |
 |---|---|---|
 | `fig1_monatomic.png` | 단원자 사슬 밴드 | 1 |
@@ -63,8 +81,9 @@ midterm-tight-binding/
 | `fig6_edge_states.png` | 유한 사슬의 스펙트럼과 위치별 확률 (예비 관찰) | 4 |
 | `fig8_resolution.png` | $N_k$, 고리 원자 수, 사슬 길이에 따른 오차 | 5-2 |
 
-## Validation and limitations
+Slide-to-figure map: slide 8 uses `fig4` and `fig3`, slide 9 `fig2`, slide 10 `fig8`, slide 13 `fig6`; slides 2, 4 and 11 use schematics (`fig_levels_N`, `fig_dimerization`, `fig_ssh_chain`, `fig_folding`) that are not simulation output.
 
+## Validation and limitations
 ### 기준과의 비교 (정확한 결과, 극한 경우)
 
 | 비교 | 결과 |
@@ -104,8 +123,9 @@ $t_1>t_2$ 사슬은 $\lvert E\rvert<0.1$ 상태가 0개(가장 가까운 에너�
 규약: 유한 사슬은 A 원자에서 시작하고 첫 결합이 $t_1$이다. 이 규약을 바꾸면 갭 안 상태가 생기는 사슬이 뒤바뀐다.
 
 ## References and AI assistance
+**AI 사용**: 이 프로젝트의 코드, 검증 설계, README, 슬라이드, 발표 대본은 AI(Claude, Anthropic)가 전적으로 작성했다. AI의 도움이 모형, 코드, 결과, 한계를 설명할 발표자의 책임을 대신하지 않는다.
 
-**AI 사용**: 이 프로젝트의 코드, 검증 설계, README, 발표 자료는 AI(Claude, Anthropic)가 전적으로 작성했다.
+**수행한 검사**: 새 커널에서 전체 실행, 스크립트(`project.py`)와 노트북의 `summary.json` 일치 확인, 해석식과 극한 비교, 슬라이드 22장 렌더링 검토, 파일 해시(`manifest.json`).
 
 **참고 문헌** (이론 배경):
 - W. P. Su, J. R. Schrieffer, A. J. Heeger, *Phys. Rev. Lett.* **42**, 1698 (1979)

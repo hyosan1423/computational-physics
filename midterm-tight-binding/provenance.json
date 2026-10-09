@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-09",
+  "presentation_file": "slides/SSH_midterm_slides.pptx",
+  "main_slides": 15,
+  "backup_slides": 7,
+  "presentation_revision": 1,
+  "original_sources": {
+    "tight_binding.ipynb": "executed notebook (revision 5, band-gap scope)",
+    "project.py": "generated from tight_binding.ipynb with nbconvert, backend set to Agg",
+    "index.html": "nbconvert HTML of the executed notebook",
+    "speaker_notes.md": "complete Korean script, time per slide and sources"
+  },
+  "script_matches_notebook": true,
+  "random_numbers_used": false,
+  "ai_assistance": "Claude (Anthropic): code, validation design, README, slides, speaker notes",
+  "latest_change": "Slides and companion files added in the layout of the instructor's Ising example; computational code and executed outputs unchanged."
+}
