@@ -4,6 +4,7 @@ Run:  python project.py
 Reads input/params.json (created from defaults if missing) and writes
 tables, figures and checks to output/.  The notebook is the single source
 of truth: this file is generated from it and gives the same numbers.
+Section 7 of the notebook (live-demo cells) only draws plots and writes no files.
 """
 import matplotlib
 matplotlib.use("Agg")          # no window: figures are only saved
@@ -496,4 +497,42 @@ print("저장된 출력 파일:")
 for p in sorted(OUT.rglob("*")):
     if p.is_file():
         print(" ", p.as_posix(), f"({p.stat().st_size} bytes)")
+
+
+# ## 7. 발표용 시연 (값을 바꿔 가며 이 셀만 다시 실행)
+# 
+# 위의 계산을 바꾸지 않고, 숫자 몇 개만 바꿔서 결과가 어떻게 달라지는지 보는 셀 두 개다. **파일을 저장하지 않는다.** 먼저 위 셀들을 모두 실행한 뒤(Run All) 셀의 값만 고쳐서 Shift+Enter로 다시 실행한다.
+
+# In[12]:
+
+
+# ▶ 시연 1: t2 를 바꾸면 밴드와 갭이 어떻게 변하나
+T1, T2 = 1.0, 0.5            # ← T2 를 0.5, 0.9, 1.0, 1.5 로 바꿔 가며 다시 실행
+k = np.linspace(-np.pi, np.pi, 400)        # 한 셀 길이 a = 1
+Em, Ep = ssh_bands(k, T1, T2)
+gap = gap_numeric(T1, T2)
+fig, ax = plt.subplots(figsize=(5.2, 3.6))
+ax.plot(k, Ep, color="C0"); ax.plot(k, Em, color="C0")
+ax.annotate("", xy=(np.pi - 0.08, gap / 2), xytext=(np.pi - 0.08, -gap / 2), arrowprops=dict(arrowstyle="<->", color="C3"))
+ax.set(xlabel="k", ylabel="E", ylim=(-2.3, 2.3), title=f"t1={T1}, t2={T2}: gap = {gap:.3f}  (2|t1-t2| = {2*abs(T1-T2):.3f})")
+ax.set_xticks([-np.pi, 0, np.pi]); ax.set_xticklabels(["-π/a", "0", "π/a"])
+plt.tight_layout(); plt.show()
+
+
+# In[13]:
+
+
+# ▶ 시연 2: 유한 사슬 — 값을 바꾸고 이 셀만 다시 실행
+T1, T2, NC = 0.5, 1.0, 20    # ← (1.0, 0.5) 와 (0.5, 1.0) 비교, NC 를 20 → 10 → 5 로 줄여 보기
+E, V = np.linalg.eigh(finite_ssh(NC, T1, T2))
+idx = np.argsort(np.abs(E))[:2]                    # 에너지 절댓값이 가장 작은 두 상태
+weight = np.sum(np.abs(V[:, idx]) ** 2, axis=1)    # 사이트별 확률
+fig, ax = plt.subplots(1, 2, figsize=(9.0, 3.4))
+ax[0].axhspan(-abs(T1 - T2), abs(T1 - T2), color="0.9")
+ax[0].plot(np.arange(len(E)), E, "o", ms=3)
+ax[0].set(xlabel="state index", ylabel="E", title="open-chain levels (gray: bulk gap region)")
+ax[1].bar(np.arange(2 * NC), weight, color="C0")
+ax[1].set(xlabel="site index", ylabel="weight", title="two states closest to E = 0")
+fig.suptitle(f"t1={T1}, t2={T2}, N_c={NC}: smallest |E| = {np.min(np.abs(E)):.2e}")
+plt.tight_layout(); plt.show()
 

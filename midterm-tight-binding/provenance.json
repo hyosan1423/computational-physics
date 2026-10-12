@@ -5,13 +5,13 @@
   "backup_slides": 7,
   "presentation_revision": 1,
   "original_sources": {
-    "tight_binding.ipynb": "executed notebook (revision 5, band-gap scope)",
+    "tight_binding.ipynb": "executed notebook (revision 6): section 7 adds two live-demo cells that write no files",
     "project.py": "generated from tight_binding.ipynb with nbconvert, backend set to Agg",
     "index.html": "nbconvert HTML of the executed notebook",
-    "speaker_notes.md": "complete Korean script, time per slide and sources"
+    "speaker_notes.md": "speaking cues (keywords), time per slide and sources"
   },
   "script_matches_notebook": true,
   "random_numbers_used": false,
   "ai_assistance": "Claude (Anthropic): code, validation design, README, slides, speaker notes",
-  "latest_change": "Slides and companion files added in the layout of the instructor's Ising example; computational code and executed outputs unchanged."
+  "latest_change": "Added presentation demo cells (notebook section 7), slides and companion files in the layout of the instructor's Ising example; speaker notes are keyword cues; all other computed outputs unchanged."
 }

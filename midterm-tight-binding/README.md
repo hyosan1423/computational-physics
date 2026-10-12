@@ -20,14 +20,14 @@ The talk follows the presentation guidelines.
 
 | Main slides | Part | Suggested time |
 |---|---|---|
-| 1–3 | Physics question and motivation | 1 minute |
-| 4–7 | Model and numerical method | 2 minutes |
-| 8–10 | Results and validation | 4 minutes |
-| 11–12 | Physical interpretation and limitations | 2 minutes |
-| 13–15 | Outlook and summary | 1 minute |
+| 1–3 | Physics question and motivation | about 1.25 minutes |
+| 4–7 | Model and numerical method | about 2 minutes |
+| 8–10 | Results and validation | about 3 minutes (includes a short live demo) |
+| 11–12 | Physical interpretation and limitations | about 1.5 minutes |
+| 13–15 | Outlook and summary | about 1.5 minutes (includes a short live demo) |
 
-Slides 16–22 are backup material. Each figure is explained in the order axes, comparison, trend, physical meaning.
-`speaker_notes.md` contains the complete script (memorized, not read), the time budget per slide, and sources.
+Slides 8 and 13 include a short live demo with the cells in section 7 of the notebook (edit the numbers at the top of the cell and run it again; no file is written). Slides 16–22 are backup material. Each figure is explained in the order axes, comparison, trend, physical meaning.
+`speaker_notes.md` contains speaking cues (keywords, not a script), the time budget per slide, and sources. Q&A is outside this allocation.
 
 ## Environment and dependencies
 
@@ -40,11 +40,12 @@ Slides 16–22 are backup material. Each figure is explained in the order axes, 
 2. For editable code, open `tight_binding.ipynb` in Jupyter or VS Code with a Python 3.12 kernel, and use **Restart Kernel and Run All** (about 10 s).
 3. For a script-only run: `python project.py`. It reads `input/params.json` (created from defaults if missing) and regenerates everything in `output/`. The script is generated from the notebook and gives the same numbers.
 4. The calculation uses no random numbers, so every run gives the same result.
+5. Section 7 of the notebook holds two demo cells for the talk: change `T2` (first cell) or `T1, T2, NC` (second cell) and run only that cell.
 
 ```
 midterm-tight-binding/
 ├── README.md
-├── tight_binding.ipynb       # editable, executed notebook
+├── tight_binding.ipynb       # editable, executed notebook (section 7: demo cells)
 ├── index.html                # offline reading copy (code, equations, figures)
 ├── project.py                # script version of the notebook
 ├── requirements.txt          # pinned versions
@@ -81,7 +82,7 @@ midterm-tight-binding/
 | `fig6_edge_states.png` | 유한 사슬의 스펙트럼과 위치별 확률 (예비 관찰) | 4 |
 | `fig8_resolution.png` | $N_k$, 고리 원자 수, 사슬 길이에 따른 오차 | 5-2 |
 
-Slide-to-figure map: slide 8 uses `fig4` and `fig3`, slide 9 `fig2`, slide 10 `fig8`, slide 13 `fig6`; slides 2, 4 and 11 use schematics (`fig_levels_N`, `fig_dimerization`, `fig_ssh_chain`, `fig_folding`) that are not simulation output.
+Slide-to-figure map: slide 8 uses `fig4` and `fig3`, slide 9 `fig2`, slide 10 `fig8`, slide 13 `fig6`; slides 2, 4 and 11 use schematics (`fig_levels_N`, `fig_dimerization`, `fig_ssh_chain`, `fig_folding`) that are not simulation output. The equations on slides 5, 16–18, 20 and 21 are typeset images (`slides/figures/eq_*.png`, matplotlib math text) so they render the same in PowerPoint and Google Slides.
 
 ## Validation and limitations
 ### 기준과의 비교 (정확한 결과, 극한 경우)
