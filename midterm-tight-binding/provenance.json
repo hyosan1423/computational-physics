@@ -1,17 +1,24 @@
 {
-  "date": "2026-10-09",
-  "presentation_file": "slides/SSH_midterm_slides.pptx",
-  "main_slides": 15,
-  "backup_slides": 7,
-  "presentation_revision": 1,
-  "original_sources": {
-    "tight_binding.ipynb": "executed notebook (revision 6): section 7 adds two live-demo cells that write no files",
-    "project.py": "generated from tight_binding.ipynb with nbconvert, backend set to Agg",
-    "index.html": "nbconvert HTML of the executed notebook",
-    "speaker_notes.md": "speaking cues (keywords), time per slide and sources"
+  "project": "SSH chain band gap (midterm)",
+  "author": "Hyosan Shin",
+  "tools": {
+    "python": "3.12.3"
   },
-  "script_matches_notebook": true,
-  "random_numbers_used": false,
-  "ai_assistance": "Claude (Anthropic): code, validation design, README, slides, speaker notes",
-  "latest_change": "Added presentation demo cells (notebook section 7), slides and companion files in the layout of the instructor's Ising example; speaker notes are keyword cues; all other computed outputs unchanged."
+  "random_numbers_used": "none",
+  "original_sources": {
+    "tight_binding.ipynb": "executed notebook, band-gap scope",
+    "slides/SSH_band_gap_midterm.pptx": "band-gap-only slides, no speaker notes",
+    "figures": "slides/figures: schematics and typeset equations; output/figs: simulation output"
+  },
+  "references": [
+    "Su, Schrieffer, Heeger, PRL 42, 1698 (1979)",
+    "Ashcroft and Mermin, Solid State Physics (1976), Ch. 8 and 10",
+    "Asboth, Oroszlany, Palyi, A Short Course on Topological Insulators (2016), Ch. 1",
+    "Peierls, Quantum Theory of Solids (1955)"
+  ],
+  "prepared_for": "midterm presentation, 2026-10-13 (band-gap scope)",
+  "first_packaged": "2026-10-09",
+  "regenerated": "2026-10-16",
+  "changes_since_first_packaging": "short motivation paragraph in the notebook intro; simplified slides without speaker notes",
+  "ai_assistance": "Claude (Anthropic): code, validation checks, README and slide design; formulas taken from the cited references and checked numerically"
 }

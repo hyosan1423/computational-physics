@@ -1,133 +1,123 @@
-# SSH 사슬의 밴드갭 — Tight-Binding 계산 (전산물리학 중간 프로젝트)
+# SSH chain band gap: tight-binding simulation
 
-Course companion to the slides in [`slides/SSH_midterm_slides.pptx`](slides/SSH_midterm_slides.pptx).
-The main talk is 15 slides with a suggested duration of 10 minutes; seven slides are backup material.
+Hyosan Shin · PHY4008 Computational Physics · Midterm project (presentation date: 2026-10-13)
 
-## Physics question
-> SSH 사슬에서 $t_2/t_1$에 따라 밴드갭은 어떻게 변하고, 끝이 있는 유한 사슬의 수치 계산은 그 값에 얼마나 잘 수렴하는가?
+Course companion to the slides in [`slides/SSH_band_gap_midterm.pptx`](slides/SSH_band_gap_midterm.pptx) (13 main slides and 3 backup slides).
 
-계산한 양: 밴드 $E_\pm(k)$와 갭 $E_{gap}$, 유한 사슬에서 가장 낮은 벌크 상태의 $\lvert E\rvert$, 그리고 (예비 관찰) 유한 사슬의 갭 안 상태.
+## Motivation and physics question
 
-**결론 (수치로 확인)**: 갭은 $E_{gap}=2\lvert t_1-t_2\rvert$이고 $t_1=t_2$에서 닫힌다. 수치 대각화는 해석식과 기계 정밀도($10^{-15}\sim10^{-16}$)로 일치하고, 열린 사슬의 갭은 셀 수 $N_c$에 대해 $1/N_c^2$로 이론값에 수렴한다. 예비 관찰로, $t_2>t_1$인 유한 사슬의 갭 안에는 $E\approx0$ 상태가 2개 있다 (원인은 이 프로젝트의 범위 밖).
+Placing atoms in a line turns their energy levels into bands, and the empty energy range between two bands (the band gap) separates metals from semiconductors. A chain whose bonds are alternately short and long (as in polyacetylene) has such a gap, and the simplest model of it is the SSH (Su–Schrieffer–Heeger) chain. This project simulates the electron energies of this chain with a tight-binding model.
 
-모델: 단위셀에 A, B 두 원자, 셀 안 hopping $t_1$, 셀 사이 hopping $t_2$. 가정: 최근접 hopping만, 오비탈 직교, 온사이트 에너지 없음. 경계조건: 밴드와 $H(k)$는 주기, 유한 사슬은 열린 경계. 규약: 유한 사슬은 A 원자에서 시작하고 첫 결합이 $t_1$.
+> How does the band gap of the SSH chain change with t2/t1, and how well does a finite-chain numerical calculation converge to it?
 
-수치 방법: 행렬 대각화 (`numpy.linalg.eigh`). 행렬이 작아서(2×2, $2N\times2N$) 정확하고 시간 간격 같은 수렴 변수가 없다.
+Quantities: the bands E±(k) and the gap, the lowest bulk |E| of an open chain (convergence to the gap), and, as a preliminary observation only, the number and location of states inside the gap of a finite chain.
+
+**Result (checked numerically):** the gap is `E_gap = 2|t1 − t2|`, it closes at t1 = t2, the numerical results agree with exact results to about 1e-15, and the error of the finite-chain gap decreases as 1/N_c² (N_c: number of unit cells). A finite chain with t2 > t1 has two states inside the gap, located at the two ends. This last item is an observation and is not explained here.
+
+## Model, assumptions, boundary conditions
+
+- Unit cell with two atoms A and B; hopping energy t1 inside a cell and t2 between cells (arbitrary units).
+- Assumptions: nearest-neighbor hopping only, orthogonal orbitals, no on-site energy, lattice constant a = 1, hbar = 1.
+- Periodic boundary conditions for bands, the Bloch Hamiltonian and rings; open boundary conditions for the finite chain.
+- Convention: the finite chain starts at atom A and its first bond is t1 (changing this swaps which chain has the in-gap states).
+
+## Numerical method
+
+Matrix diagonalization (`numpy.linalg.eigvalsh` / `eigh`): a 2×2 matrix at every k, and a 2N_c × 2N_c matrix for the open chain. The matrices are small, so the result is exact up to machine precision and there is no step size to converge. No random numbers are used, so every run gives the same result.
+
+## What the main quantities mean (plain language)
+
+| Symbol | Meaning |
+|---|---|
+| t1, t2 | hopping energies: how strongly an electron is coupled to its neighbor inside / between unit cells |
+| k | wavenumber: a label for the electron states of a periodic chain (unit 1/length) |
+| h(k) = t1 + t2 e^(ika) | coupling between A and B summed over cells; the two band energies are +|h| and −|h| |
+| E_gap | lower edge of the upper band minus upper edge of the lower band |
+| N_c, N_k, N | number of unit cells, number of k points, number of atoms in a ring |
 
 ## Presentation structure
 
-The talk follows the presentation guidelines.
-
-| Main slides | Part | Suggested time |
-|---|---|---|
-| 1–3 | Physics question and motivation | about 1.25 minutes |
-| 4–7 | Model and numerical method | about 2 minutes |
-| 8–10 | Results and validation | about 3 minutes (includes a short live demo) |
-| 11–12 | Physical interpretation and limitations | about 1.5 minutes |
-| 13–15 | Outlook and summary | about 1.5 minutes (includes a short live demo) |
-
-Slides 8 and 13 include a short live demo with the cells in section 7 of the notebook (edit the numbers at the top of the cell and run it again; no file is written). Slides 16–22 are backup material. Each figure is explained in the order axes, comparison, trend, physical meaning.
-`speaker_notes.md` contains speaking cues (keywords, not a script), the time budget per slide, and sources. Q&A is outside this allocation.
+| Slides | Part |
+|---|---|
+| 1–3 | Title, motivation, question and quantities |
+| 4–7 | Model, gap formula from the references, quantities computed, numerical workflow |
+| 8–10 | Results and validation (gap vs t2, comparison with exact results, resolution) |
+| 11–13 | Interpretation (as explained in the references), limitations, summary |
+| 14–16 | Backup: gap formula, monatomic chain, reproducibility and sources |
 
 ## Environment and dependencies
 
-- Python 3.12.3. Tested versions are pinned in `requirements.txt` (numpy 2.4.4, matplotlib 3.10.8, ipykernel, nbformat, nbclient, nbconvert).
-- Install in a fresh environment: `python3.12 -m venv venv`, activate it, then `python -m pip install -r requirements.txt` and `python -m pip install jupyterlab`.
+Python 3.12, packages pinned in `requirements.txt` (numpy 2.4.4, matplotlib 3.10.8, ipykernel 7.4.0, nbformat 5.11.1, nbclient 0.11.0, nbconvert 7.17.1).
 
 ## How to run
 
-1. Open `index.html` for the executed notebook with equations and figures. It works offline.
-2. For editable code, open `tight_binding.ipynb` in Jupyter or VS Code with a Python 3.12 kernel, and use **Restart Kernel and Run All** (about 10 s).
-3. For a script-only run: `python project.py`. It reads `input/params.json` (created from defaults if missing) and regenerates everything in `output/`. The script is generated from the notebook and gives the same numbers.
-4. The calculation uses no random numbers, so every run gives the same result.
-5. Section 7 of the notebook holds two demo cells for the talk: change `T2` (first cell) or `T1, T2, NC` (second cell) and run only that cell.
+1. Install: `python -m pip install -r requirements.txt` (and `jupyterlab` if you want to edit the notebook).
+2. Notebook: open `tight_binding.ipynb`, use **Restart Kernel and Run All** (about 10 s).
+3. Script: `python project.py` writes the same tables and figures to `output/`.
+4. No random numbers are used, so every run gives the same result. `index.html` is a static copy of the executed notebook.
 
 ```
 midterm-tight-binding/
 ├── README.md
-├── tight_binding.ipynb       # editable, executed notebook (section 7: demo cells)
-├── index.html                # offline reading copy (code, equations, figures)
-├── project.py                # script version of the notebook
-├── requirements.txt          # pinned versions
-├── manifest.json             # SHA-256 of every file
-├── provenance.json           # sources and revision
-├── speaker_notes.md          # complete script, time per slide, sources
-├── slides/SSH_midterm_slides.pptx
-├── input/params.json         # input: calculation settings
-└── output/                   # csv tables, summary.json, figs/*.png
+├── tight_binding.ipynb       # executed notebook
+├── project.py                # script generated from the notebook
+├── index.html                # static copy of the notebook
+├── requirements.txt
+├── manifest.json             # SHA-256 checksum of every file
+├── provenance.json
+├── input/params.json         # every setting
+├── output/                   # csv tables, summary.json, figs/
+└── slides/                   # deck and the images it uses
 ```
 
 ## Inputs and parameters
-모든 계산 조건은 `input/params.json`에 있다 (파일이 없으면 노트북이 기본값으로 만든다). 이 파일의 값만 바꾸고 다시 실행하면 결과가 바뀐다.
 
-| 키 | 의미 | 기본값 |
-|---|---|---|
-| `t_monatomic` | 단원자 사슬 hopping $t$ | 1.0 |
-| `ring_N` | 고리 원자 수 | 20 |
-| `ssh_pairs` | 비교할 $(t_1,t_2)$ 쌍 | (1, 0.5), (0.5, 1) |
-| `gap_scan` | 갭 스캔: $t_1$, $t_2$ 범위, 점 수 | $t_1=1$, $t_2\in[0,2]$, 81점 |
-| `chain.n_cells` | 유한 사슬의 셀 수 | 20 |
-| `chain.edge_threshold` | "영 근처"의 기준 $\lvert E\rvert$ | 0.1 |
-| `resolution.nk_list` | $k$ 격자 점 수 목록 | 3 ~ 64 |
-| `resolution.ring_N_list` | 고리 원자 수 목록 | 10 ~ 101 |
-| `resolution.chain_gap_ncell_list` | 사슬 길이(셀 수) 목록 | 10 ~ 160 |
+All settings are in `input/params.json` (created from defaults if missing): the hopping pairs (t1, t2) for the bands and the gap table, the t2 scan range for the gap, the number of unit cells of the open chain and the threshold for in-gap states (|E| < 0.1), and the lists of N_k, ring sizes and chain lengths for the resolution tests.
 
 ## How to reproduce the figures
-| 그림 | 내용 | 노트북 절 |
-|---|---|---|
-| `fig1_monatomic.png` | 단원자 사슬 밴드 | 1 |
-| `fig2_ring_check.png` | 고리 대각화 vs 해석식 | 1-2 |
-| `fig3_bands_compare.png` | $(1,0.5)$와 $(0.5,1)$의 밴드 | 2 |
-| `fig4_gap_vs_t2.png` | 갭 vs $t_2$ | 3 |
-| `fig6_edge_states.png` | 유한 사슬의 스펙트럼과 위치별 확률 (예비 관찰) | 4 |
-| `fig8_resolution.png` | $N_k$, 고리 원자 수, 사슬 길이에 따른 오차 | 5-2 |
 
-Slide-to-figure map: slide 8 uses `fig4` and `fig3`, slide 9 `fig2`, slide 10 `fig8`, slide 13 `fig6`; slides 2, 4 and 11 use schematics (`fig_levels_N`, `fig_dimerization`, `fig_ssh_chain`, `fig_folding`) that are not simulation output. The equations on slides 5, 16–18, 20 and 21 are typeset images (`slides/figures/eq_*.png`, matplotlib math text) so they render the same in PowerPoint and Google Slides.
+| File | Content | Notebook section |
+|---|---|---|
+| `fig1_monatomic.png` | monatomic chain: analytic vs diagonalization | 1 |
+| `fig2_ring_check.png` | ring of 20 atoms vs analytic E(k) | 5-1 |
+| `fig3_bands_compare.png` | SSH bands for (1, 0.5) and (0.5, 1) | 2 |
+| `fig4_gap_vs_t2.png` | gap vs t2 | 3 |
+| `fig6_edge_states.png` | finite-chain levels and weights of the states closest to E = 0 | 4 |
+| `fig8_resolution.png` | errors vs N_k, ring size and chain length | 5-2 |
+
+Slides 2, 4 and 11 use schematics (`fig_levels_N`, `fig_dimerization`, `fig_ssh_chain`, `fig_folding`) that are not simulation output. The equations on the slides are typeset images embedded in the deck.
 
 ## Validation and limitations
-### 기준과의 비교 (정확한 결과, 극한 경우)
 
-| 비교 | 결과 |
+| Check | Result |
 |---|---|
-| 원자 20개 고리 $20\times20$ 대각화 vs 해석식 $\epsilon_0-2t\cos ka$ | 최대 차이 $1.1\times10^{-15}$ |
-| SSH $2\times2$ 대각화 vs $\pm\lvert t_1+t_2e^{ika}\rvert$ | 최대 차이 $2.2\times10^{-16}$ |
-| 수치 갭 vs $2\lvert t_1-t_2\rvert$ ($t_2\in[0,2]$) | 최대 차이 $2.4\times10^{-16}$, $t_2=t_1$에서 0 |
-| 극한 $t_1=t_2$: SSH 고리 vs 같은 원자 수의 단원자 고리 | 스펙트럼 차이 0 |
-| 극한 $t_2\to0$: 이합체만 남음 | 모든 $\lvert E\rvert=t_1$ |
-| 극한 $t_1\to0$ (예비 관찰의 직관) | 끝 원자가 끊어져 $E=0$ 상태 정확히 2개, 끝 원자 확률 1.000 |
+| Ring of 20 atoms vs analytic E(k) = −2t cos(ka) | max difference 1.1e-15 |
+| SSH 2×2 energies vs ±|h(k)| | max difference 2.2e-16 |
+| Gap vs 2|t1 − t2| over the t2 scan | max difference 2.4e-16 |
+| t1 = t2: SSH ring vs monatomic ring | difference 0 |
+| t2 → 0 (isolated A–B pairs) | all |E| = t1 |
+| t1 → 0 (end atoms decouple) | two E = 0 states, end-site weight 1.0 |
 
-### 수치 해상도
+Error definitions: ring, SSH and gap: maximum over all levels of |numerical − analytic|; k grid: gap computed on the grid minus the exact gap 2|t1 − t2|; ring size: 2t minus the largest eigenvalue; chain length: lowest bulk |E| minus |t1 − t2| (for t2 > t1 the two in-gap states are skipped).
 
-| 바꾼 것 | 보는 양 | 결과 |
-|---|---|---|
-| $k$ 격자 점 수 $N_k$ | 갭 오차 | 짝수 $N_k$는 갭이 가장 작은 $k=\pi$를 지나 오차 0. 홀수는 과대평가 ($(1,0.5)$: $N_k=3$에서 $+0.73$, $17$에서 $+0.033$, $33$에서 $+0.009$) |
-| 고리 원자 수 $N$ | 밴드 꼭대기와 $2t$의 차이 | 짝수 $N$은 $\sim10^{-16}$, 홀수 $N$은 $2t(1-\cos(\pi/N))$과 일치 ($N=11$: 0.081, $N=101$: $9.7\times10^{-4}$) |
-| 유한 사슬의 셀 수 $N_c$ | 가장 낮은 벌크 $\lvert E\rvert$와 $\lvert t_1-t_2\rvert$의 차이 | $N_c=10,20,40,80,160$에서 $0.033,\ 0.010,\ 0.0028,\ 0.00073,\ 0.00019$ ($(1,0.5)$). 로그 기울기 $-1.92$ ($(1,0.5)$), $-2.03$ ($(0.5,1)$): $\propto1/N_c^2$ |
+Resolution (t1, t2) = (1, 0.5): with an even number of k points the grid contains k = π and the gap error is 0; with an odd number it is skipped (error +0.033 at N_k = 17, +0.009 at 33). For the open chain the error is 0.033, 0.010, 0.0028, 0.00073, 0.00019 at N_c = 10, 20, 40, 80, 160, a log–log slope of about −1.9, consistent with 1/N_c² (second-order expansion of |h| near k = π/a, coefficient 4.93, measured 4.8 at N_c = 160).
 
-### 샘플링
-
-이 프로젝트의 계산은 난수를 쓰지 않는 **결정론적 계산**이라 샘플링 불확도는 해당 없다. 수치 불확도는 기계 정밀도뿐이다.
-
-### 예비 관찰 (원인은 다루지 않음)
-
-$t_1>t_2$ 사슬은 $\lvert E\rvert<0.1$ 상태가 0개(가장 가까운 에너지 $\pm0.51$), $t_2>t_1$ 사슬은 2개이고 확률이 양 끝에 몰린다 (`fig6_edge_states.png`).
-
-### 한계
-
-| 확인하지 않은 것 | 확인 방법 |
+| Not done / limitation | How to check |
 |---|---|
-| 실제 물질(폴리아세틸렌)의 $t_1, t_2$ | 문헌의 hopping 값으로 같은 계산 반복, 측정된 갭과 비교 |
-| 사슬 길이 $N_c\le160$ 너머, 갭이 아주 작은 경우($(1,0.9)$는 아직 점근 영역 밖) | 더 긴 사슬로 $1/N_c^2$ 추세 확인 |
-| 갭 안 상태가 유지되는 이유 | 별도 프로젝트에서 진폭 해석과 무질서 비교로 다룬다 |
-| 2차원(그래핀), 전자 사이의 상호작용 | 이 모델의 범위 밖 |
-
-규약: 유한 사슬은 A 원자에서 시작하고 첫 결합이 $t_1$이다. 이 규약을 바꾸면 갭 안 상태가 생기는 사슬이 뒤바뀐다.
+| Real polyacetylene hopping values are not used | repeat with literature t1, t2 and compare with the measured gap |
+| Chain length N_c ≤ 160; small gaps are not yet asymptotic | longer chains, check the 1/N_c² trend |
+| Why the in-gap states appear | outside this project: analyze their amplitudes, length dependence and symmetry |
+| 2D (graphene), electron–electron interaction | outside this model |
 
 ## References and AI assistance
-**AI 사용**: 이 프로젝트의 코드, 검증 설계, README, 슬라이드, 발표 대본은 AI(Claude, Anthropic)가 전적으로 작성했다. AI의 도움이 모형, 코드, 결과, 한계를 설명할 발표자의 책임을 대신하지 않는다.
 
-**수행한 검사**: 새 커널에서 전체 실행, 스크립트(`project.py`)와 노트북의 `summary.json` 일치 확인, 해석식과 극한 비교, 슬라이드 22장 렌더링 검토, 파일 해시(`manifest.json`).
+**References** (numbers match the slides)
 
-**참고 문헌** (이론 배경):
-- W. P. Su, J. R. Schrieffer, A. J. Heeger, *Phys. Rev. Lett.* **42**, 1698 (1979)
-- J. K. Asbóth, L. Oroszlány, A. Pályi, *A Short Course on Topological Insulators*, Springer (2016), arXiv:1509.02295
+1. W. P. Su, J. R. Schrieffer, A. J. Heeger, Solitons in polyacetylene, Phys. Rev. Lett. 42, 1698 (1979).
+2. N. W. Ashcroft, N. D. Mermin, Solid State Physics (1976): Ch. 8 (Bloch's theorem), Ch. 10 (the tight-binding method).
+3. J. K. Asbóth, L. Oroszlány, A. Pályi, A Short Course on Topological Insulators, Lecture Notes in Physics 919 (Springer, 2016), arXiv:1509.02295, Ch. 1.
+4. R. E. Peierls, Quantum Theory of Solids (Oxford University Press, 1955).
+
+Derived in this project, not taken from a reference: the error definitions and the 1/N_c² error scaling.
+
+**AI assistance:** Claude (Anthropic) was used for the code, validation checks, README and slide design. The formulas are taken from the cited references and checked numerically with the code.

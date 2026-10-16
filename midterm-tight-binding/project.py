@@ -4,7 +4,7 @@ Run:  python project.py
 Reads input/params.json (created from defaults if missing) and writes
 tables, figures and checks to output/.  The notebook is the single source
 of truth: this file is generated from it and gives the same numbers.
-Section 7 of the notebook (live-demo cells) only draws plots and writes no files.
+The calculation uses no random numbers.
 """
 import matplotlib
 matplotlib.use("Agg")          # no window: figures are only saved
@@ -14,6 +14,9 @@ matplotlib.use("Agg")          # no window: figures are only saved
 # # SSH 사슬의 밴드갭 — Tight-Binding 계산
 # 
 # 전산물리학 중간 프로젝트 · 신효산
+# 
+# ## 동기
+# 원자를 한 줄로 이으면 전자의 에너지 준위가 띠(밴드)로 모이고, 띠 사이의 빈 구간(밴드갭)이 금속과 반도체를 가른다. 폴리아세틸렌처럼 짧은 결합과 긴 결합이 번갈아 나오는 사슬에서는 갭이 열린다고 알려져 있고, 이를 가장 단순하게 만든 모형이 SSH 사슬이다. 이 프로젝트는 이 사슬의 전자 에너지를 **컴퓨터로 시뮬레이션**해서, 결합 세기의 비 $t_2/t_1$이 바뀔 때 갭이 어떻게 변하는지 확인하고 해석식과 비교한다.
 # 
 # ## 물리 질문 (하나)
 # > SSH 사슬에서 $t_2/t_1$에 따라 밴드갭은 어떻게 변하고, 끝이 있는 유한 사슬의 수치 계산은 그 값에 얼마나 잘 수렴하는가?
@@ -481,7 +484,7 @@ SUMMARY["sampling"] = "not applicable (deterministic)"
 # |---|---|
 # | 실제 물질(폴리아세틸렌)의 $t_1,t_2$ | 문헌의 hopping 값으로 같은 계산을 반복하고 측정된 갭과 비교 |
 # | 사슬 길이 $N_c\le160$ 너머, 갭이 아주 작은 경우 | 더 긴 사슬을 돌려 $1/N_c^2$ 추세 확인 |
-# | 갭 안 상태가 유지되는 이유 | 기말에서 진폭 해석과 무질서 비교로 다룬다 |
+# | 갭 안 상태가 생기는 이유 | 이 프로젝트의 범위 밖. 상태의 진폭 분포와 대칭을 분석하면 확인할 수 있다 |
 # | 2차원(그래핀), 전자 사이의 상호작용 | 이 모델의 범위 밖 |
 # 
 # **규약 주의**: 유한 사슬은 A 원자에서 시작하고 셀 안 결합이 $t_1$이다. 이 규약을 바꾸면 갭 안 상태가 생기는 사슬이 뒤바뀐다.
@@ -497,42 +500,4 @@ print("저장된 출력 파일:")
 for p in sorted(OUT.rglob("*")):
     if p.is_file():
         print(" ", p.as_posix(), f"({p.stat().st_size} bytes)")
-
-
-# ## 7. 발표용 시연 (값을 바꿔 가며 이 셀만 다시 실행)
-# 
-# 위의 계산을 바꾸지 않고, 숫자 몇 개만 바꿔서 결과가 어떻게 달라지는지 보는 셀 두 개다. **파일을 저장하지 않는다.** 먼저 위 셀들을 모두 실행한 뒤(Run All) 셀의 값만 고쳐서 Shift+Enter로 다시 실행한다.
-
-# In[12]:
-
-
-# ▶ 시연 1: t2 를 바꾸면 밴드와 갭이 어떻게 변하나
-T1, T2 = 1.0, 0.5            # ← T2 를 0.5, 0.9, 1.0, 1.5 로 바꿔 가며 다시 실행
-k = np.linspace(-np.pi, np.pi, 400)        # 한 셀 길이 a = 1
-Em, Ep = ssh_bands(k, T1, T2)
-gap = gap_numeric(T1, T2)
-fig, ax = plt.subplots(figsize=(5.2, 3.6))
-ax.plot(k, Ep, color="C0"); ax.plot(k, Em, color="C0")
-ax.annotate("", xy=(np.pi - 0.08, gap / 2), xytext=(np.pi - 0.08, -gap / 2), arrowprops=dict(arrowstyle="<->", color="C3"))
-ax.set(xlabel="k", ylabel="E", ylim=(-2.3, 2.3), title=f"t1={T1}, t2={T2}: gap = {gap:.3f}  (2|t1-t2| = {2*abs(T1-T2):.3f})")
-ax.set_xticks([-np.pi, 0, np.pi]); ax.set_xticklabels(["-π/a", "0", "π/a"])
-plt.tight_layout(); plt.show()
-
-
-# In[13]:
-
-
-# ▶ 시연 2: 유한 사슬 — 값을 바꾸고 이 셀만 다시 실행
-T1, T2, NC = 0.5, 1.0, 20    # ← (1.0, 0.5) 와 (0.5, 1.0) 비교, NC 를 20 → 10 → 5 로 줄여 보기
-E, V = np.linalg.eigh(finite_ssh(NC, T1, T2))
-idx = np.argsort(np.abs(E))[:2]                    # 에너지 절댓값이 가장 작은 두 상태
-weight = np.sum(np.abs(V[:, idx]) ** 2, axis=1)    # 사이트별 확률
-fig, ax = plt.subplots(1, 2, figsize=(9.0, 3.4))
-ax[0].axhspan(-abs(T1 - T2), abs(T1 - T2), color="0.9")
-ax[0].plot(np.arange(len(E)), E, "o", ms=3)
-ax[0].set(xlabel="state index", ylabel="E", title="open-chain levels (gray: bulk gap region)")
-ax[1].bar(np.arange(2 * NC), weight, color="C0")
-ax[1].set(xlabel="site index", ylabel="weight", title="two states closest to E = 0")
-fig.suptitle(f"t1={T1}, t2={T2}, N_c={NC}: smallest |E| = {np.min(np.abs(E)):.2e}")
-plt.tight_layout(); plt.show()
 
